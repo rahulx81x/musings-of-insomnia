@@ -1,0 +1,367 @@
+/* ─── Google Fonts ────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:wght@400;500;700&family=Cormorant+SC:wght@400;500&display=swap');
+
+@import "tailwindcss";
+
+/* ─── Design Tokens (derived from Static_Sample.html) ─────────── */
+:root {
+  /* Backgrounds */
+  --bg-deep: #0c0d14;
+  --bg-surface: #161824;
+  --bg-divider: #1b1d2b;
+  --bg-card: #2a2c3d;
+
+  /* Accents */
+  --accent-gold: #cbb984;
+  --accent-sepia: #8a7a5c;
+  --accent-warm: #6b4a2b;
+
+  /* Text */
+  --text-cream: #e5dec9;
+  --text-light: #ece2c6;
+  --text-epigraph: #d8cba0;
+  --text-muted: #8a7a5c;
+
+  /* Typography */
+  --font-body: 'Cormorant Garamond', 'Palatino Linotype', 'Palatino', serif;
+  --font-display: 'Playfair Display', 'Georgia', serif;
+  --font-accent: 'Cormorant SC', 'Cormorant Garamond', serif;
+
+  /* Spacing */
+  --content-max-width: 720px;
+  --content-padding: 2rem;
+}
+
+/* ─── Base Styles ─────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scrolling */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-deep);
+  color: var(--text-cream);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(203, 185, 132, 0.3);
+  color: var(--text-light);
+}
+
+/* ─── Content Container ──────────────────────────────────────────── */
+.content-container {
+  position: relative;
+  z-index: 1;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 var(--content-padding);
+}
+
+/* ─── Section Base ───────────────────────────────────────────────── */
+.section-fullscreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem var(--content-padding);
+}
+
+/* ─── Typography Scale ───────────────────────────────────────────── */
+/* Act titles */
+.act-number {
+  font-family: var(--font-accent);
+  font-size: 1.875rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.05em;
+}
+
+.act-title {
+  font-family: var(--font-display);
+  font-size: 1.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.act-subtitle {
+  display: block;
+  font-family: var(--font-accent);
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+/* Poem typography */
+.poem-roman {
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  color: var(--accent-sepia);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.poem-title {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.poem-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem var(--content-padding);
+  position: relative;
+  text-align: center;
+}
+
+.poem-container {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.poem-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 1.15rem;
+  line-height: 2;
+}
+
+.stanza {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto 2.5rem auto;
+}
+
+.stanza:last-child {
+  margin-bottom: 0;
+}
+
+.verse-line {
+  display: block;
+  width: 100%;
+  text-align: center;
+  line-height: 2;
+  margin: 0 auto;
+}
+
+/* Epigraph */
+.epigraph-text {
+  font-family: var(--font-accent);
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.8;
+  color: var(--text-epigraph);
+  max-width: 32rem;
+  text-align: center;
+}
+
+/* Running head */
+.running-head {
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+/* ─── Hero / Title Page ──────────────────────────────────────────── */
+.hero-eyebrow {
+  font-family: var(--font-accent);
+  font-size: 1.375rem;
+  letter-spacing: 0.1em;
+  color: var(--accent-gold);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  letter-spacing: 0.15em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.hero-subtitle {
+  font-size: 0.875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+}
+
+.hero-author {
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.hero-author-label {
+  display: block;
+  font-family: var(--font-accent);
+  font-size: 0.9375rem;
+  text-transform: none;
+  letter-spacing: 0.05em;
+  color: var(--accent-gold);
+  margin-bottom: 0.25rem;
+}
+
+/* ─── Glassmorphic HUD ───────────────────────────────────────────── */
+.hud-glass {
+  background: rgba(12, 13, 20, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(203, 185, 132, 0.12);
+}
+
+/* ─── TOC Drawer ─────────────────────────────────────────────────── */
+.toc-act-title {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  border-bottom: 1px solid rgba(107, 74, 43, 0.4);
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.toc-entry {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--text-cream);
+  padding: 0.25rem 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.toc-entry:hover {
+  color: var(--accent-gold);
+}
+
+.toc-entry.active {
+  color: var(--accent-gold);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.toc-roman {
+  font-style: normal;
+  color: var(--accent-sepia);
+  width: 2.5rem;
+  display: inline-block;
+}
+
+/* ─── Ornament ───────────────────────────────────────────────────── */
+.ornament-rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 2rem 0;
+}
+
+.ornament-line {
+  width: 70px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--accent-sepia), transparent);
+}
+
+.ornament-glyph {
+  color: var(--accent-sepia);
+  font-size: 0.8125rem;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-sepia);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-gold);
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  :root {
+    --content-padding: 1.25rem;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .act-title {
+    font-size: 1.25rem;
+  }
+
+  .poem-title {
+    font-size: 1.125rem;
+  }
+
+  .poem-body {
+    font-size: 1rem;
+  }
+
+  .epigraph-text {
+    font-size: 1.0625rem;
+  }
+}
