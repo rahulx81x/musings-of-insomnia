@@ -7,6 +7,7 @@ import EpigraphSection from './components/EpigraphSection';
 import PoemSection from './components/PoemSection';
 import ActDivider from './components/ActDivider';
 import EpilogueSection from './components/EpilogueSection';
+import FeedbackSection from './components/FeedbackSection';
 import CreditsSection from './components/CreditsSection';
 import HUD from './components/HUD';
 import { useLenis } from './hooks/useLenis';
@@ -126,6 +127,9 @@ export default function App() {
             epilogue={anthology.epilogue}
             author={anthology.author}
           />
+
+          {/* Reader Feedback */}
+          <FeedbackSection />
 
           {/* Credits & Acknowledgements */}
           <CreditsSection

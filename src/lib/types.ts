@@ -44,6 +44,7 @@ export type SectionType =
   | 'act-divider'
   | 'poem'
   | 'epilogue'
+  | 'feedback'
   | 'credits';
 
 export type CanvasMode =

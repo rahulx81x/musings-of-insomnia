@@ -67,6 +67,8 @@ export default function HUD({
       : 'Prologue · The Genesis';
   } else if (activeSection.type === 'epilogue') {
     displayTitle = 'Epilogue & Author’s Note';
+  } else if (activeSection.type === 'feedback') {
+    displayTitle = 'A Letter to the Author';
   } else if (activeSection.type === 'credits') {
     displayTitle = 'Credits & Acknowledgements';
   } else if (activeSection.actTitle) {

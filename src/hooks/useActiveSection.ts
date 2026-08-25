@@ -3,7 +3,7 @@ import type { ActiveSection, CanvasMode, SectionType } from '../lib/types';
 
 function getCanvasModeForSection(type: SectionType, actIndex: number | null): CanvasMode {
   if (type === 'hero' || type === 'epigraph' || type === 'prologue') return 'prologue';
-  if (type === 'epilogue' || type === 'credits') return 'stillness';
+  if (type === 'epilogue' || type === 'feedback' || type === 'credits') return 'stillness';
 
   if (actIndex === null) return 'prologue';
   switch (actIndex) {
@@ -81,6 +81,9 @@ export function useActiveSection(isReady: boolean = true): ActiveSection & { pro
           if (!poemTitle) poemTitle = 'Where Do I Start Again?';
         } else if (sectionType === 'epilogue') {
           actTitle = 'Epilogue & Author’s Note';
+        } else if (sectionType === 'feedback') {
+          actTitle = 'Reader Feedback & Letter';
+          if (!poemTitle) poemTitle = 'Reader Feedback';
         } else if (sectionType === 'credits') {
           actTitle = 'Credits & Acknowledgements';
           if (!poemTitle) poemTitle = 'Credits';

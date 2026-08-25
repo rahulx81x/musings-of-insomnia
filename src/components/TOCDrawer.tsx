@@ -146,6 +146,18 @@ export default function TOCDrawer({ open, onClose, anthology, activePoemId, onNa
               </div>
             </div>
 
+            {/* Feedback */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <div className="toc-act-title">Reader Feedback</div>
+              <div
+                className={`toc-entry ${activePoemId === 'feedback' ? 'active' : ''}`}
+                onClick={() => onNavigate('#feedback')}
+              >
+                <span className="toc-roman">&nbsp;</span>
+                A Letter to the Author
+              </div>
+            </div>
+
             {/* Credits */}
             <div style={{ marginBottom: '1.5rem' }}>
               <div className="toc-act-title">Acknowledgements</div>
