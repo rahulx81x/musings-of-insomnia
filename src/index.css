@@ -247,6 +247,39 @@ body {
   border-bottom: 1px solid rgba(203, 185, 132, 0.12);
 }
 
+.hud-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(203, 185, 132, 0.6);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.hud-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.35);
+  background: #fff;
+}
+
+.hud-volume-slider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(203, 185, 132, 0.6);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.hud-volume-slider::-moz-range-thumb:hover {
+  transform: scale(1.35);
+  background: #fff;
+}
+
 /* ─── TOC Drawer ─────────────────────────────────────────────────── */
 .toc-act-title {
   font-family: var(--font-display);
@@ -322,6 +355,18 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-gold);
+}
+
+/* ─── Credits Section ────────────────────────────────────────────── */
+.credits-section {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .credits-section {
+    padding-top: 5rem !important;
+    padding-bottom: 4rem !important;
+  }
 }
 
 /* ─── Reduced Motion ─────────────────────────────────────────────── */

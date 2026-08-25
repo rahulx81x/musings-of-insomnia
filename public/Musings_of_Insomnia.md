@@ -32,6 +32,7 @@
   - [XIV. The Sound of Silence](#xiv-the-sound-of-silence)
   - [XV. The Crossroad](#xv-the-crossroad)
 - [EPILOGUE & AUTHOR'S NOTE](#epilogue--authors-note)
+- [CREDITS & ACKNOWLEDGEMENTS](#credits--acknowledgements)
 
 ---
 
@@ -557,3 +558,21 @@ And hold hands as the night ends.
 # EPILOGUE & AUTHOR'S NOTE
 
 > *"The road was never straight, nor was it meant to be easy. We carry our quiet hours, our broken notes, and our unspoken letters not as weight, but as proof that we walked, we felt, and we chose to continue."*
+
+---
+
+# CREDITS & ACKNOWLEDGEMENTS
+
+> *"A quiet tribute to the words, voices, and echoes that seeded these verses across the night."*
+
+### Literary Inspirations & Quotes
+- **The Broken Choir (Act III, Poem IX)**: Conceived and inspired by a quote from **@shinaparvain** on Instagram.
+- **The Replica / "How Do I Tell My Dreams..." (Act I, Poem III)**: The opening theme was inspired by a quote by **@ignitisanima** on Instagram *(archival / discontinued account)*.
+
+### Digital Anthology & Web Experience
+- **Author & Poetry**: Rahul Gouri
+- **Digital Experience & Design**: Built with React, Vite, Framer Motion, Lenis, and HTML5 Generative Canvas
+- **Typography**: Cormorant Garamond, Playfair Display & Cormorant SC (Google Fonts)
+- **Ambient Soundtrack**: [Freesound - Music Box - J. Brahms - Opus 39 - Waltz no 3 by Flying_Deer_Fx](https://freesound.org/people/Flying_Deer_Fx/sounds/369405/)
+
+

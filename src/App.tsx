@@ -7,6 +7,7 @@ import EpigraphSection from './components/EpigraphSection';
 import PoemSection from './components/PoemSection';
 import ActDivider from './components/ActDivider';
 import EpilogueSection from './components/EpilogueSection';
+import CreditsSection from './components/CreditsSection';
 import HUD from './components/HUD';
 import { useLenis } from './hooks/useLenis';
 import { useActiveSection } from './hooks/useActiveSection';
@@ -20,7 +21,7 @@ export default function App() {
   const { scrollTo } = useLenis();
   const activeSection = useActiveSection(anthology !== null);
   const isVigil = useVigilMode();
-  const { isMuted, isLoaded: isAudioLoaded, toggleMute } = useAmbientAudio();
+  const { isMuted, isLoaded: isAudioLoaded, volume, setVolume, toggleMute } = useAmbientAudio();
 
   useEffect(() => {
     parseAnthology()
@@ -73,6 +74,8 @@ export default function App() {
         progress={activeSection.progress}
         isMuted={isMuted}
         isAudioLoaded={isAudioLoaded}
+        volume={volume}
+        onVolumeChange={setVolume}
         onToggleMute={toggleMute}
         isVigil={isVigil}
         anthology={anthology}
@@ -121,6 +124,11 @@ export default function App() {
           {/* Epilogue */}
           <EpilogueSection
             epilogue={anthology.epilogue}
+            author={anthology.author}
+          />
+
+          {/* Credits & Acknowledgements */}
+          <CreditsSection
             author={anthology.author}
           />
         </div>

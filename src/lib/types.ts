@@ -43,7 +43,8 @@ export type SectionType =
   | 'prologue'
   | 'act-divider'
   | 'poem'
-  | 'epilogue';
+  | 'epilogue'
+  | 'credits';
 
 export type CanvasMode =
   | 'prologue'    // Hero + Epigraph + Prologue
