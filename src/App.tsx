@@ -10,6 +10,7 @@ import EpilogueSection from './components/EpilogueSection';
 import FeedbackSection from './components/FeedbackSection';
 import CreditsSection from './components/CreditsSection';
 import HUD from './components/HUD';
+import SoundPrompt from './components/SoundPrompt';
 import { useLenis } from './hooks/useLenis';
 import { useActiveSection } from './hooks/useActiveSection';
 import { useVigilMode } from './hooks/useVigilMode';
@@ -22,7 +23,15 @@ export default function App() {
   const { scrollTo } = useLenis();
   const activeSection = useActiveSection(anthology !== null);
   const isVigil = useVigilMode();
-  const { isMuted, isLoaded: isAudioLoaded, volume, setVolume, toggleMute } = useAmbientAudio();
+  const {
+    isMuted,
+    isLoaded: isAudioLoaded,
+    volume,
+    setVolume,
+    toggleMute,
+    needsStartChoice,
+    chooseAudioStart,
+  } = useAmbientAudio();
 
   useEffect(() => {
     parseAnthology()
@@ -68,6 +77,11 @@ export default function App() {
     <>
       {/* Generative background canvas */}
       <CanvasBackground activeMode={activeSection.canvasMode} />
+
+      {/* One-time start-of-site sound prompt. Only ever affects how playback
+          begins; the HUD's own controller (below) remains the way to change
+          it afterward. */}
+      <SoundPrompt open={needsStartChoice} onChoose={chooseAudioStart} />
 
       {/* Floating HUD */}
       <HUD
