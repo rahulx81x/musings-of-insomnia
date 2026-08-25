@@ -219,13 +219,11 @@ export default function HUD({
                     top: 'calc(100% + 12px)',
                     right: 0,
                     width: '220px',
-                    background: 'rgba(12, 13, 22, 0.98)',
-                    backdropFilter: 'blur(24px)',
-                    WebkitBackdropFilter: 'blur(24px)',
+                    background: 'var(--bg-deep)',
                     border: '1px solid rgba(203, 185, 132, 0.35)',
                     borderRadius: '8px',
                     padding: '1rem 1.1rem',
-                    boxShadow: '0 16px 40px rgba(0, 0, 0, 0.8), 0 0 12px rgba(203, 185, 132, 0.1)',
+                    boxShadow: '0 16px 40px rgba(0, 0, 0, 0.9), 0 0 12px rgba(203, 185, 132, 0.1)',
                     zIndex: 60,
                   }}
                 >

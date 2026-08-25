@@ -239,19 +239,12 @@ body {
   margin-bottom: 0.25rem;
 }
 
-/* ─── Glassmorphic HUD ───────────────────────────────────────────── */
-.hud-glass {
-  background: rgba(10, 11, 18, 0.90);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+/* ─── Opaque HUD ─────────────────────────────────────────────────── */
+.hud-glass,
+.hud-opaque {
+  background: var(--bg-deep);
   border-bottom: 1px solid rgba(203, 185, 132, 0.18);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
-}
-
-@supports not (backdrop-filter: blur(1px)) {
-  .hud-glass {
-    background: rgba(12, 13, 20, 0.98);
-  }
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.85);
 }
 
 .hud-volume-slider::-webkit-slider-thumb {
