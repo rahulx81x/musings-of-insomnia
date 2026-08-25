@@ -2,8 +2,19 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 const AUDIO_SRC = '/audio/369405__flying_deer_fx__music-box-j.wav';
 const DEFAULT_VOLUME = 0.35;
+const CHOICE_KEY = 'moi-audio-start-choice';
 
 export function useAmbientAudio() {
+  // Whether the visitor has already answered the start-of-site prompt.
+  // Returning visitors (choice already stored) skip the prompt entirely and
+  // fall back to their previously saved mute/volume preference, exactly as before.
+  const [needsStartChoice, setNeedsStartChoice] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(CHOICE_KEY) === null;
+    } catch {
+      return true;
+    }
+  });
   const [volume, setVolumeState] = useState<number>(() => {
     try {
       const stored = localStorage.getItem('moi-audio-volume');
@@ -38,7 +49,10 @@ export function useAmbientAudio() {
     isMutedRef.current = isMuted;
   }, [volume, isMuted]);
 
-  // Initialize single native HTMLAudioElement and start playback immediately
+  // Initialize single native HTMLAudioElement.
+  // Returning visitors (who already answered the start prompt) resume playback
+  // immediately per their saved preference, same as before. First-time visitors
+  // wait for an explicit answer to the start-of-site prompt (see chooseAudioStart).
   useEffect(() => {
     const audio = new Audio();
     audio.src = AUDIO_SRC;
@@ -48,9 +62,16 @@ export function useAmbientAudio() {
     audio.volume = isMutedRef.current ? 0 : (volumeRef.current > 0 ? volumeRef.current : DEFAULT_VOLUME);
 
     let cleanupInteractionListeners: (() => void) | null = null;
+    let skipAutoplay = false;
+    try {
+      skipAutoplay = localStorage.getItem(CHOICE_KEY) === null;
+    } catch {
+      skipAutoplay = false;
+    }
 
     const tryPlay = () => {
       setIsLoaded(true);
+      if (skipAutoplay) return;
       if (!isMutedRef.current && audio.paused) {
         const promise = audio.play();
         if (promise !== undefined) {
@@ -139,6 +160,45 @@ export function useAmbientAudio() {
     }
   }, []);
 
+  // Answers the one-time start-of-site prompt. Called from a real click handler,
+  // so `audio.play()` here satisfies the browser's autoplay policy directly.
+  // This only decides how playback *starts*; the HUD's volume/mute controller
+  // (setVolume / toggleMute above) is untouched and remains the sole way to
+  // change things afterward.
+  const chooseAudioStart = useCallback((withMusic: boolean) => {
+    try {
+      localStorage.setItem(CHOICE_KEY, 'true');
+    } catch {}
+
+    const audio = audioRef.current;
+
+    if (withMusic) {
+      const startVolume = lastVolumeRef.current > 0 ? lastVolumeRef.current : DEFAULT_VOLUME;
+      setVolumeState(startVolume);
+      setIsMuted(false);
+      if (audio) {
+        audio.muted = false;
+        audio.volume = startVolume;
+        audio.play().catch(() => {});
+      }
+      try {
+        localStorage.setItem('moi-audio-muted', 'false');
+        localStorage.setItem('moi-audio-volume', String(startVolume));
+      } catch {}
+    } else {
+      setIsMuted(true);
+      if (audio) {
+        audio.muted = true;
+        audio.pause();
+      }
+      try {
+        localStorage.setItem('moi-audio-muted', 'true');
+      } catch {}
+    }
+
+    setNeedsStartChoice(false);
+  }, []);
+
   const toggleMute = useCallback(() => {
     setIsMuted((prevMuted) => {
       const nextMuted = !prevMuted;
@@ -174,5 +234,5 @@ export function useAmbientAudio() {
     });
   }, []);
 
-  return { isMuted, isLoaded, volume, setVolume, toggleMute };
+  return { isMuted, isLoaded, volume, setVolume, toggleMute, needsStartChoice, chooseAudioStart };
 }
