@@ -106,15 +106,18 @@ export default function HUD({
           <AnimatePresence mode="wait">
             <motion.span
               key={displayTitle}
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.25 }}
               style={{
-                fontSize: '0.75rem',
-                letterSpacing: '0.12em',
+                fontFamily: 'var(--font-accent)',
+                fontSize: '0.85rem',
+                letterSpacing: '0.14em',
                 textTransform: 'uppercase',
-                color: 'var(--text-muted)',
+                color: 'var(--text-light)',
+                fontWeight: 500,
+                textShadow: '0 1px 4px rgba(0, 0, 0, 0.8)',
               }}
             >
               {displayTitle}
@@ -129,13 +132,14 @@ export default function HUD({
           left: 0,
           right: 0,
           height: '2px',
-          background: 'rgba(203, 185, 132, 0.08)',
+          background: 'rgba(203, 185, 132, 0.12)',
         }}>
           <motion.div
             style={{
               height: '100%',
               background: 'var(--accent-gold)',
               width: `${progress * 100}%`,
+              boxShadow: '0 0 8px rgba(203, 185, 132, 0.6)',
             }}
             transition={{ duration: 0.1 }}
           />
@@ -145,7 +149,7 @@ export default function HUD({
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.75rem',
+          gap: '0.6rem',
         }}>
           {/* Vigil badge */}
           {isVigil && (
@@ -153,14 +157,17 @@ export default function HUD({
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               style={{
-                fontSize: '0.625rem',
-                letterSpacing: '0.1em',
+                fontFamily: 'var(--font-accent)',
+                fontSize: '0.6875rem',
+                letterSpacing: '0.12em',
                 textTransform: 'uppercase',
                 color: 'var(--accent-gold)',
-                padding: '0.2rem 0.5rem',
-                border: '1px solid rgba(203, 185, 132, 0.25)',
-                borderRadius: '2px',
+                background: 'rgba(203, 185, 132, 0.12)',
+                padding: '0.25rem 0.55rem',
+                border: '1px solid rgba(203, 185, 132, 0.35)',
+                borderRadius: '4px',
                 whiteSpace: 'nowrap',
+                textShadow: '0 1px 2px rgba(0,0,0,0.5)',
               }}
             >
               12–05 Vigil
@@ -181,19 +188,19 @@ export default function HUD({
               aria-label="Sound settings"
               title="Adjust ambient volume"
               style={{
-                background: volumeOpen ? 'rgba(203, 185, 132, 0.15)' : 'none',
-                border: volumeOpen ? '1px solid rgba(203, 185, 132, 0.3)' : '1px solid transparent',
-                borderRadius: '4px',
+                background: volumeOpen ? 'rgba(203, 185, 132, 0.22)' : 'rgba(203, 185, 132, 0.08)',
+                border: volumeOpen ? '1px solid rgba(203, 185, 132, 0.45)' : '1px solid rgba(203, 185, 132, 0.2)',
+                borderRadius: '5px',
                 cursor: 'pointer',
                 color: isMuted ? 'var(--text-muted)' : 'var(--accent-gold)',
-                fontSize: '1.05rem',
-                padding: '0.25rem 0.35rem',
+                fontSize: '1rem',
+                padding: '0.35rem 0.55rem',
                 lineHeight: 1,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 transition: 'all 0.2s',
-                opacity: isAudioLoaded ? 1 : 0.6,
+                opacity: isAudioLoaded ? 1 : 0.7,
               }}
             >
               {getVolumeIcon()}
@@ -209,16 +216,16 @@ export default function HUD({
                   transition={{ duration: 0.2, ease: 'easeOut' }}
                   style={{
                     position: 'absolute',
-                    top: 'calc(100% + 10px)',
+                    top: 'calc(100% + 12px)',
                     right: 0,
-                    width: '210px',
-                    background: 'rgba(18, 20, 30, 0.96)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    border: '1px solid rgba(203, 185, 132, 0.25)',
+                    width: '220px',
+                    background: 'rgba(12, 13, 22, 0.98)',
+                    backdropFilter: 'blur(24px)',
+                    WebkitBackdropFilter: 'blur(24px)',
+                    border: '1px solid rgba(203, 185, 132, 0.35)',
                     borderRadius: '8px',
-                    padding: '0.9rem 1rem',
-                    boxShadow: '0 12px 36px rgba(0, 0, 0, 0.6)',
+                    padding: '1rem 1.1rem',
+                    boxShadow: '0 16px 40px rgba(0, 0, 0, 0.8), 0 0 12px rgba(203, 185, 132, 0.1)',
                     zIndex: 60,
                   }}
                 >
@@ -338,15 +345,20 @@ export default function HUD({
           <button
             onClick={() => setTocOpen(!tocOpen)}
             aria-label="Table of Contents"
+            title="Table of Contents"
             style={{
-              background: 'none',
-              border: 'none',
+              background: tocOpen ? 'rgba(203, 185, 132, 0.22)' : 'rgba(203, 185, 132, 0.08)',
+              border: tocOpen ? '1px solid rgba(203, 185, 132, 0.45)' : '1px solid rgba(203, 185, 132, 0.2)',
+              borderRadius: '5px',
               cursor: 'pointer',
-              color: tocOpen ? 'var(--accent-gold)' : 'var(--text-muted)',
+              color: tocOpen ? 'var(--accent-gold)' : 'var(--text-light)',
               fontSize: '1rem',
-              padding: '0.25rem',
+              padding: '0.35rem 0.55rem',
               lineHeight: 1,
-              transition: 'color 0.2s',
+              transition: 'all 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             ☰

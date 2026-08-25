@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 
 const AUDIO_SRC = '/audio/369405__flying_deer_fx__music-box-j.wav';
 const DEFAULT_VOLUME = 0.35;
@@ -21,7 +21,7 @@ export function useAmbientAudio() {
   const [isMuted, setIsMuted] = useState<boolean>(() => {
     try {
       const stored = localStorage.getItem('moi-audio-muted');
-      return stored !== null ? stored === 'true' : false; // Default unmuted
+      return stored !== null ? stored === 'true' : false;
     } catch {
       return false;
     }
@@ -30,6 +30,7 @@ export function useAmbientAudio() {
   const [isLoaded, setIsLoaded] = useState(false);
   const howlRef = useRef<Howl | null>(null);
   const lastVolumeRef = useRef<number>(volume > 0 ? volume : DEFAULT_VOLUME);
+  const isPlayingRef = useRef<boolean>(false);
 
   // Initialize Howler instance
   useEffect(() => {
@@ -39,14 +40,37 @@ export function useAmbientAudio() {
       volume: volume > 0 ? volume : DEFAULT_VOLUME,
       mute: isMuted,
       html5: true,
+      preload: true,
       format: ['wav'],
       onload: () => {
         setIsLoaded(true);
-        if (!isMuted && volume > 0 && !howl.playing()) {
-          howl.play();
+        if (!isMuted && volume > 0) {
+          try {
+            const id = howl.play();
+            if (id !== null && id !== undefined) {
+              isPlayingRef.current = true;
+            }
+          } catch {
+            // Autoplay blocked on mobile, will be unlocked on gesture
+          }
         }
       },
-      onloaderror: () => setIsLoaded(true),
+      onplay: () => {
+        isPlayingRef.current = true;
+      },
+      onpause: () => {
+        isPlayingRef.current = false;
+      },
+      onstop: () => {
+        isPlayingRef.current = false;
+      },
+      onloaderror: () => {
+        setIsLoaded(true);
+      },
+      onplayerror: (_id, _err) => {
+        isPlayingRef.current = false;
+        // Autoplay policy prevented playback until user interaction
+      },
     });
 
     howlRef.current = howl;
@@ -54,10 +78,11 @@ export function useAmbientAudio() {
     return () => {
       howl.unload();
       howlRef.current = null;
+      isPlayingRef.current = false;
     };
   }, []);
 
-  // Sync volume / mute changes directly
+  // Sync volume / mute changes to Howl and localStorage
   useEffect(() => {
     const howl = howlRef.current;
     if (!howl) return;
@@ -67,7 +92,11 @@ export function useAmbientAudio() {
     if (!isMuted && volume > 0) {
       howl.volume(volume);
       if (!howl.playing()) {
-        howl.play();
+        try {
+          howl.play();
+        } catch {
+          // Handled by user gesture
+        }
       }
     }
 
@@ -81,33 +110,96 @@ export function useAmbientAudio() {
     }
   }, [isMuted, volume, isLoaded]);
 
-  // Autoplay on first user interaction if unmuted
+  // Mobile & Desktop gesture unlock: keep listening until audio actually starts playing
   useEffect(() => {
     if (isMuted || volume === 0) return;
 
-    const handleFirstInteraction = () => {
-      const howl = howlRef.current;
-      if (howl && !isMuted && volume > 0) {
-        howl.mute(false);
-        howl.volume(volume);
-        if (!howl.playing()) {
-          howl.play();
-        }
+    let attached = false;
+    const events = ['touchstart', 'touchend', 'click', 'pointerdown', 'keydown'] as const;
+
+    const cleanup = () => {
+      if (attached) {
+        events.forEach((evt) => {
+          window.removeEventListener(evt, handleInteraction, { capture: true });
+        });
+        attached = false;
       }
     };
 
-    window.addEventListener('pointerdown', handleFirstInteraction, { once: true });
-    window.addEventListener('keydown', handleFirstInteraction, { once: true });
+    const handleInteraction = () => {
+      const howl = howlRef.current;
+      if (!howl || isMuted || volume === 0) {
+        cleanup();
+        return;
+      }
+
+      // Resume Web Audio AudioContext if suspended
+      if (typeof Howler !== 'undefined' && Howler.ctx && Howler.ctx.state === 'suspended') {
+        Howler.ctx.resume().catch(() => {});
+      }
+
+      // Try unlocking HTML5 Audio node directly if applicable
+      try {
+        const sound = (howl as unknown as { _sounds?: Array<{ _node?: HTMLAudioElement }> })._sounds?.[0];
+        if (sound?._node) {
+          sound._node.muted = false;
+          sound._node.volume = volume;
+        }
+      } catch {
+        // Ignore
+      }
+
+      if (!howl.playing()) {
+        try {
+          howl.mute(false);
+          howl.volume(volume);
+          const playId = howl.play();
+          if (playId !== null && playId !== undefined) {
+            isPlayingRef.current = true;
+          }
+        } catch {
+          // Still waiting or blocked, keep listeners active
+        }
+      }
+
+      // If audio is now playing, detach listeners
+      if (howl.playing() || isPlayingRef.current) {
+        cleanup();
+      }
+    };
+
+    // Attach listeners
+    events.forEach((evt) => {
+      window.addEventListener(evt, handleInteraction, { capture: true, passive: true });
+    });
+    attached = true;
+
+    // Also listen to Howl 'play' event to clean up once playing
+    const howl = howlRef.current;
+    if (howl) {
+      if (howl.playing()) {
+        cleanup();
+      } else {
+        howl.once('play', () => {
+          cleanup();
+        });
+      }
+    }
 
     return () => {
-      window.removeEventListener('pointerdown', handleFirstInteraction);
-      window.removeEventListener('keydown', handleFirstInteraction);
+      cleanup();
     };
-  }, [isMuted, volume]);
+  }, [isMuted, volume, isLoaded]);
 
   const setVolume = useCallback((newVol: number) => {
     const clamped = Math.max(0, Math.min(1, newVol));
     const howl = howlRef.current;
+
+    // Resume AudioContext if suspended
+    if (typeof Howler !== 'undefined' && Howler.ctx && Howler.ctx.state === 'suspended') {
+      Howler.ctx.resume().catch(() => {});
+    }
+
     if (clamped === 0) {
       setIsMuted(true);
       setVolumeState(0);
@@ -122,14 +214,23 @@ export function useAmbientAudio() {
         howl.mute(false);
         howl.volume(clamped);
         if (!howl.playing()) {
-          howl.play();
+          try {
+            howl.play();
+          } catch {
+            // Ignore
+          }
         }
       }
     }
   }, []);
 
   const toggleMute = useCallback(() => {
-    setIsMuted(prev => {
+    // Resume AudioContext if suspended
+    if (typeof Howler !== 'undefined' && Howler.ctx && Howler.ctx.state === 'suspended') {
+      Howler.ctx.resume().catch(() => {});
+    }
+
+    setIsMuted((prev) => {
       const next = !prev;
       const howl = howlRef.current;
       if (howl) {
@@ -140,7 +241,11 @@ export function useAmbientAudio() {
           howl.mute(false);
           howl.volume(restoredVol);
           if (!howl.playing()) {
-            howl.play();
+            try {
+              howl.play();
+            } catch {
+              // Ignore
+            }
           }
         } else {
           // Muting
@@ -153,4 +258,3 @@ export function useAmbientAudio() {
 
   return { isMuted, isLoaded, volume, setVolume, toggleMute };
 }
-
